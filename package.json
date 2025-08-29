@@ -1,0 +1,24 @@
+{
+  "name": "playwright-mcp-ui-ux-tester",
+  "version": "1.0.0",
+  "description": "Playwright MCP UI/UX Testing Tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:exploration": "playwright test --config=playwright-mcp.config.ts",
+    "test:visual": "playwright test --config=playwright-mcp.config.ts ./tests/exploration/ai-visual-issues.spec.ts",
+    "show-results": "node tests/exploration/ai-show-visual-results.js",
+    "install-browsers": "playwright install"
+  },
+  "keywords": ["playwright", "mcp", "testing", "ui", "ux"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0"
+  }
+}
