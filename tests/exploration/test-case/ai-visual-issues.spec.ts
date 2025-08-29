@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
-import { getExplorationConfig, validateConfig } from './utils/env-config'
-import { VisualExplorationHelper } from './utils/ai-exploration-helper'
+import { getExplorationConfig, validateConfig } from '../utils/env-config'
+import { VisualExplorationHelper } from '../utils/ai-exploration-helper'
 import * as fs from 'fs'
 import * as path from 'path'
 

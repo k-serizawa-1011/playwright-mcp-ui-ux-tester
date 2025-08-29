@@ -198,7 +198,7 @@ function displayResults(data) {
  * メイン処理
  */
 function main() {
-  const resultsDir = path.join(__dirname, './outputs')
+  const resultsDir = path.join(__dirname, '../outputs')
 
   console.log('🔍 UI違和感検知結果を確認中...')
   console.log(`📁 結果ディレクトリ: ${resultsDir}`)

@@ -25,6 +25,15 @@ Playwright MCPを活用したUI違和感検知テストが含まれています�
 - フォントサイズ不整合検出
 - スクリーンショットで問題箇所をハイライト
 
+**🚀 画面遷移テスト機能**
+
+- クリック可能な要素の自動検出
+- フォーム入力フィールドの自動検出
+- 画面遷移の自動テスト実行
+- 遷移成功/失敗の判定
+- スクリーンショットによる遷移結果の記録
+- 応答時間の測定
+
 ## 🔧 セットアップ
 
 ### 1. 依存関係のインストール
@@ -83,6 +92,27 @@ npx playwright test --config=playwright-mcp.config.ts ./tests/exploration/ai-vis
 - スクリーンショットで問題箇所をハイライト
 - 高速実行（約3-4秒程度）
 - 最も使用頻度の高い機能
+
+### 画面遷移テストの実行
+
+```bash
+npm run test:navigation
+```
+
+または、特定のブラウザで実行：
+
+```bash
+npx playwright test --config=playwright-mcp.config.ts ./tests/exploration/ai-navigation-test.spec.ts --project=chromium
+```
+
+**特徴：**
+
+- クリック可能な要素の自動検出とテスト
+- フォーム入力フィールドの自動テスト
+- 画面遷移の成功/失敗を自動判定
+- 遷移後のスクリーンショット自動撮影
+- 応答時間の測定
+- 最大10個の要素をテスト（パフォーマンス考慮）
 
 ## 📊 結果確認方法
 
@@ -240,6 +270,116 @@ start tests/exploration/outputs/screenshots/visual-issues-{timestamp}-highlighte
 3. **スペーシング**: 要素間の間隔が適切か
 4. **フォントサイズ**: 文字サイズが統一されているか
 
+### 🚀 画面遷移テスト結果の確認方法
+
+#### ステップ1: 画面遷移テストを実行
+
+```bash
+npm run test:navigation
+```
+
+#### ステップ2: 結果の詳細確認
+
+```bash
+npm run show-navigation-results
+```
+
+**出力例：**
+
+```
+🔍 画面遷移テスト結果を確認中...
+
+🎯 画面遷移テスト結果サマリー
+==================================================
+📄 ページタイトル: Google
+🔗 対象URL: https://www.google.com
+⏰ 実行日時: 2025/8/29 14:30:15
+📁 結果ファイル: navigation-results-20250829143015.json
+
+📊 検出された要素数:
+🔗 クリック可能要素: 15個
+📝 入力フィールド: 3個
+🚀 実行されたテスト: 10個
+
+📈 テスト結果:
+✅ 成功: 8個
+❌ 失敗: 2個
+📊 成功率: 80%
+
+✅ 成功した画面遷移:
+--------------------------------------------------
+1. INPUT: input[name="q"]
+   📝 入力値: test search
+   ⏱️  応答時間: 150ms
+
+2. BUTTON: input[type="submit"]
+   🔗 URL変更: https://www.google.com → https://www.google.com/search?q=test+search
+   📄 タイトル変更: Google → test search - Google 検索
+   ⏱️  応答時間: 1200ms
+   📸 スクリーンショット: tests/exploration/outputs/screenshots/navigation-button-1735123456789.png
+
+❌ 失敗した画面遷移:
+--------------------------------------------------
+1. LINK: a[href="#"]
+   🚫 エラー: Element not found
+
+📊 要素タイプ別分析:
+--------------------------------------------------
+INPUT:
+   📊 総数: 3個
+   ✅ 成功: 3個
+   ❌ 失敗: 0個
+   📈 成功率: 100%
+
+BUTTON:
+   📊 総数: 5個
+   ✅ 成功: 4個
+   ❌ 失敗: 1個
+   📈 成功率: 80%
+
+💡 推奨アクション:
+--------------------------------------------------
+1. 失敗した遷移の修正 (2個)
+   - 要素のセレクターを確認
+   - 要素が正しく表示されているか確認
+   - JavaScriptエラーの確認
+
+2. 成功した遷移の最適化 (8個)
+   - 応答時間の改善
+   - ユーザビリティの向上
+
+3. 追加のテストケース検討
+   - より多くの要素のテスト
+   - エッジケースの追加
+```
+
+#### ステップ3: 遷移後のスクリーンショット確認
+
+成功した画面遷移のスクリーンショットを確認
+
+```bash
+ls -la tests/exploration/outputs/screenshots/navigation-*.png
+```
+
+**生成されるファイル：**
+
+- `navigation-test-{timestamp}-initial.png` - 初期画面
+- `navigation-{elementType}-{timestamp}.png` - 各遷移後の画面
+
+#### ステップ4: スクリーンショットを開いて確認
+
+**macOSの場合：**
+
+```bash
+open tests/exploration/outputs/screenshots/navigation-*.png
+```
+
+**Windowsの場合：**
+
+```bash
+start tests/exploration/outputs/screenshots/navigation-*.png
+```
+
 ## 📁 プロジェクト構造
 
 ```
@@ -252,14 +392,17 @@ playwright-mcp-ui-ux-tester/
 ├── playwright-mcp.config.ts               # Playwright MCP設定
 ├── tests/
 │   └── exploration/
-│       ├── ai-visual-issues.spec.ts       # テストファイル
-│       ├── ai-show-visual-results.js      # 結果表示スクリプト
+│       ├── ai-visual-issues.spec.ts       # UI違和感検知テスト
+│       ├── ai-navigation-test.spec.ts     # 画面遷移テスト
+│       ├── ai-show-visual-results.js      # UI違和感検知結果表示
+│       ├── ai-show-navigation-results.js  # 画面遷移結果表示
 │       ├── outputs/                       # 出力ディレクトリ
 │       │   ├── screenshots/               # スクリーンショット
 │       │   ├── test-results/              # Playwright標準出力
 │       │   └── exploration-report/        # HTMLレポート
 │       └── utils/
-│           ├── ai-exploration-helper.ts   # ヘルパー関数
+│           ├── ai-exploration-helper.ts   # UI違和感検知ヘルパー
+│           ├── ai-navigation-helper.ts    # 画面遷移テストヘルパー
 │           └── env-config.ts              # 環境設定
 └── docs/                                  # ドキュメント
 ```
@@ -318,6 +461,36 @@ playwright-mcp-ui-ux-tester/
    - 標準偏差8px以上のばらつきを検出
    - フォントサイズの統一性をチェック
 
+### 画面遷移テスト機能の成果
+
+新しく追加された画面遷移テスト機能により、以下の機能を自動テスト：
+
+1. **クリック可能要素の自動検出**
+
+   - ボタン、リンク、フォーム送信ボタンなどを自動検出
+   - 表示状態と有効性を確認
+
+2. **フォーム入力フィールドの自動検出**
+
+   - テキスト入力、メール、パスワード、検索フィールドなどを検出
+   - 入力タイプに応じた適切なテスト値を自動生成
+
+3. **画面遷移の自動テスト**
+
+   - 最大10個の要素を自動的にテスト
+   - URL変更、タイトル変更による遷移成功判定
+   - 応答時間の測定
+
+4. **エラー検出とレポート**
+
+   - 失敗した遷移の詳細なエラー情報
+   - 要素タイプ別の成功率分析
+   - 推奨アクションの提示
+
+5. **スクリーンショットによる記録**
+   - 各遷移後の画面を自動撮影
+   - 視覚的な確認が可能
+
 ### 推奨アクション
 
 1. **最優先**: 要素の重なり問題の修正（566個）
@@ -335,6 +508,12 @@ playwright-mcp-ui-ux-tester/
 
    - パディング/マージンの統一
    - フォントサイズの統一
+
+4. **画面遷移の最適化**
+
+   - 失敗した遷移の修正
+   - 応答時間の改善
+   - ユーザビリティの向上
 
 ## 🛠️ トラブルシューティング
 
@@ -386,8 +565,14 @@ npm run test:exploration
 # UI違和感検知テスト実行
 npm run test:visual
 
-# 結果表示
+# 画面遷移テスト実行
+npm run test:navigation
+
+# UI違和感検知結果表示
 npm run show-results
+
+# 画面遷移結果表示
+npm run show-navigation-results
 
 # ブラウザインストール
 npm run install-browsers
@@ -399,11 +584,17 @@ npm run install-browsers
 # 特定のブラウザでテスト実行
 npx playwright test --config=playwright-mcp.config.ts ./tests/exploration/ai-visual-issues.spec.ts --project=chromium
 
+# 画面遷移テスト実行
+npx playwright test --config=playwright-mcp.config.ts ./tests/exploration/ai-navigation-test.spec.ts --project=chromium
+
 # HTMLレポート表示
 npx playwright show-report tests/exploration/outputs/exploration-report
 
 # 結果表示スクリプト実行
 node tests/exploration/ai-show-visual-results.js
+
+# 画面遷移結果表示スクリプト実行
+node tests/exploration/ai-show-navigation-results.js
 ```
 
 ## 📚 参考資料

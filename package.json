@@ -6,8 +6,12 @@
   "scripts": {
     "test": "playwright test",
     "test:exploration": "playwright test --config=playwright-mcp.config.ts",
-    "test:visual": "playwright test --config=playwright-mcp.config.ts ./tests/exploration/ai-visual-issues.spec.ts",
-    "show-results": "node tests/exploration/ai-show-visual-results.js",
+    "test:visual": "playwright test --config=playwright-mcp.config.ts ./tests/exploration/test-case/ai-visual-issues.spec.ts",
+    "test:navigation": "playwright test --config=playwright-mcp.config.ts ./tests/exploration/test-case/ai-navigation-test.spec.ts",
+    "test:ai-generator": "playwright test --config=playwright-mcp.config.ts ./tests/exploration/test-case/ai-test-case-generator.spec.ts",
+    "show-results": "node tests/exploration/scripts/ai-show-visual-results.js",
+    "show-navigation-results": "node tests/exploration/scripts/ai-show-navigation-results.js",
+    "show-ai-test-case-results": "node tests/exploration/scripts/ai-show-test-case-results.js",
     "install-browsers": "playwright install"
   },
   "keywords": ["playwright", "mcp", "testing", "ui", "ux"],
